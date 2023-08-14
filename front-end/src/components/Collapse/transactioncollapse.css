@@ -1,0 +1,63 @@
+.collapse-header {
+  display: flex;
+  position: relative;
+}
+
+.account-balance {
+  font-size: 1.6em;
+}
+
+.balance-section {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px lightgray;
+}
+
+.header-infos {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em 2.5em;
+  width: 100%;
+}
+
+.chevron {
+  height: 1em;
+  width: auto;
+  position: absolute;
+  margin-left: 10px;
+  top: 30%;
+}
+
+.chevron-up {
+  transform: rotate(270deg);
+  transition-duration: 0.3s;
+}
+
+.chevron-down {
+  transform: rotate(90deg);
+  transition-duration: 0.3s;
+}
+
+.collapse-text {
+  display: flex;
+  align-items: center;
+}
+
+.collapse-content-container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0em 2.5em;
+}
+
+.collapse-content-text-group {
+  padding-bottom: 0.7em;
+}
+.collapse-open {
+  display: block;
+}
+
+.collapse-close {
+  display: none;
+}
