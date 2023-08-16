@@ -33,22 +33,32 @@ function UserPage() {
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/user/profile",
-        { headers: { token } },
-        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
-      console.log(JSON.stringify(response?.data?.body));
+      console.log(response.data.body);
+      const data = response?.data?.body;
+      setFirstName(data.firstName); // Assuming your response contains a firstName field
+      setLastName(data.lastName); // Assuming your response contains a lastName field
     } catch (err) {
       if (!err?.response) {
-        setErrMsg("No server Response");
+        setErrMsg("No server response");
       } else if (err.response?.status === 400) {
-        setErrMsg("Invalid Fields");
+        setErrMsg("Invalid fields");
       } else if (err.response?.status === 500) {
-        setErrMsg("internal server error");
+        setErrMsg("Internal server error");
       } else {
-        setErrMsg("Login Failed");
+        setErrMsg("Login failed");
       }
     }
   };
+
   const visibility = useSelector((state) => state.edit.visibility);
   const dispatch = useDispatch();
 
