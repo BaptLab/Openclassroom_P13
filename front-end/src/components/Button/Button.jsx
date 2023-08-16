@@ -1,5 +1,5 @@
 function Button(props) {
-  return <div class="account-content-wrapper cta">{props.children}</div>;
+  return <div className="account-content-wrapper cta">{props.children}</div>;
 }
 
 export default Button;

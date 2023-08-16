@@ -5,9 +5,14 @@ import Header from "../components/layout/Header";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../context/AuthProvider";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { update } from "../redux/store/updateAuthSlice";
 const Login_URL = "http://localhost:3001/api/v1/user/login";
 
 function Login() {
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
   const { setAuth } = useContext(AuthContext);
 
   const userRef = useRef();
@@ -36,11 +41,14 @@ function Login() {
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
       console.log(JSON.stringify(response?.data));
-      const accessToken = response?.data?.token;
+      const accessToken = response?.data?.body?.token;
+      localStorage.setItem("AccessToken", accessToken);
+      //récupère le token dans le state
       setAuth({ user, pwd, accessToken });
+      //vide les champs
       setUser("");
       setPwd("");
-      setSuccess("");
+      dispatch(update(accessToken));
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No server Response");

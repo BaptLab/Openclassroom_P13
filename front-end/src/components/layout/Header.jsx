@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../assets/images/img/argentBankLogo.png";
 import logout from "../../assets/images/img/icon-logout.png";
+import HandleLogout from "../events/HandleLogout";
 
 function Header(props) {
   return (
@@ -10,7 +11,7 @@ function Header(props) {
         <h1 className="sr-only">Argent Bank</h1>
       </a>
       {props.signin ? (
-        <a href="/Login" className="logout">
+        <a href="#" onClick={HandleLogout} className="logout">
           <img src={logout} className="logout-btn" alt="Logout Button" />
           <span className="logout-text">Log out</span>
         </a>

@@ -7,14 +7,54 @@ import Header from "../components/layout/Header";
 import Button from "../components/Button/Button";
 import { display, hide } from "../redux/editslice";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
 
 function UserPage() {
+  /*   const token = useSelector((state) => state.auth.token);
+   */
+  const [errMesg, setErrMsg] = useState("");
+
+  useEffect(() => {
+    getNameInfos();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, []);
+
+  const token = localStorage.getItem("AccessToken");
+  console.log("Token from localStorage:", token);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const getNameInfos = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/v1/user/profile",
+        { headers: { token } },
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
+      console.log(JSON.stringify(response?.data?.body));
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Invalid Fields");
+      } else if (err.response?.status === 500) {
+        setErrMsg("internal server error");
+      } else {
+        setErrMsg("Login Failed");
+      }
+    }
+  };
   const visibility = useSelector((state) => state.edit.visibility);
   const dispatch = useDispatch();
 
-  const [firstName, setFirstName] = useState("John");
+  /*   const [firstName, setFirstName] = useState("John");
   const [lastName, setLastName] = useState("Smith");
-  const [editedFirstName, setEditedFirstName] = useState(firstName);
+ */ const [editedFirstName, setEditedFirstName] = useState(firstName);
   const [editedLastName, setEditedLastName] = useState(lastName);
 
   const handleCancel = () => {
@@ -36,6 +76,7 @@ function UserPage() {
   const handleLastNameChange = (e) => {
     setEditedLastName(e.target.value);
   };
+  getNameInfos();
 
   return (
     <div className="page-container">

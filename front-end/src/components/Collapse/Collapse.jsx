@@ -12,7 +12,6 @@ function Collapse(props) {
         <img
           onClick={() => {
             setOpen(!open);
-            console.log(open);
           }}
           className={`chevron ${!open ? "chevron-down" : "chevron-up"}`}
           alt="collapse"

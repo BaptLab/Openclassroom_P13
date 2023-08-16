@@ -1,9 +1,16 @@
+import { useDispatch, useSelector } from "react-redux";
 import Collapse from "../components/Collapse/Collapse";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
-import React from "react";
+import React, { useEffect } from "react";
 
 function Transactions() {
+  const token = useSelector((state) => state.auth.token);
+  console.log(token);
+  useEffect(() => {
+    console.log(token);
+  }, []);
+
   return (
     <React.Fragment>
       <Header signin="true" />
