@@ -6,7 +6,7 @@ export const editSlice = createSlice({
     visibility: false,
   },
   reducers: {
-    display: (state) => {
+    show: (state) => {
       state.visibility = true;
     },
     hide: (state) => {
@@ -15,6 +15,6 @@ export const editSlice = createSlice({
   },
 });
 
-export const { display, hide } = editSlice.actions;
+export const { show, hide } = editSlice.actions;
 
 export default editSlice.reducer;

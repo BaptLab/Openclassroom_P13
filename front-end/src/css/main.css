@@ -393,6 +393,19 @@ body {
   margin-bottom: 4rem;
 }
 
+.header-right {
+  display: flex;
+}
+.user-icon {
+  display: flex;
+  margin-right: 20px;
+  align-items: center;
+}
+
+.header-user-name {
+  margin-right: 8px;
+}
+
 .transaction-button {
   display: block;
   width: 100%;

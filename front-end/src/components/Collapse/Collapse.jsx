@@ -6,13 +6,15 @@ import TransactionHeader from "./TransactionHeader";
 function Collapse(props) {
   const [open, setOpen] = useState(false);
 
+  const toggleCollapse = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className={`collapse-container `}>
       <div className="collapse-header">
         <img
-          onClick={() => {
-            setOpen(!open);
-          }}
+          onClick={toggleCollapse}
           className={`chevron ${!open ? "chevron-down" : "chevron-up"}`}
           alt="collapse"
           src={chevron}

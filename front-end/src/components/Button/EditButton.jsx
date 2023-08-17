@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { display, hide } from "../../redux/editslice";
+import { hide, show } from "../../redux/editslice";
 
-function EditButton(props) {
+const EditButton = (props) => {
   const visibility = useSelector((state) => state.edit.visibility);
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(visibility ? hide() : display());
+    dispatch(visibility ? hide() : show());
   };
 
   return (
@@ -15,6 +15,6 @@ function EditButton(props) {
       {props.action}
     </button>
   );
-}
+};
 
 export default EditButton;

@@ -1,14 +1,11 @@
-//Components
+import React from "react";
 import Header from "../components/layout/Header.jsx";
 import Tagline from "../components/tagline/Tagline.jsx";
 import Footer from "../components/layout/Footer.jsx";
-//CSS
 import "../css/main.css";
-
-//Import tagline icons
 import chatIcon from "../assets/images/img/icon-chat.png";
 import moneyIcon from "../assets/images/img/icon-money.png";
-import securityicon from "../assets/images/img/icon-security.png";
+import securityIcon from "../assets/images/img/icon-security.png";
 
 function Homepage() {
   return (
@@ -40,7 +37,7 @@ function Homepage() {
           />
           <Tagline
             title="Security you can trust"
-            img={securityicon}
+            img={securityIcon}
             text="We use top of the line encryption to make sure your data and money is always safe."
             alt="Security Icon"
           />

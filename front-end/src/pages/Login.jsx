@@ -1,65 +1,50 @@
-import Button from "../components/Button/Button";
-import RedirectButton from "../components/Button/RedirectButton";
-import Footer from "../components/layout/Footer";
-import Header from "../components/layout/Header";
-import { useRef, useState, useEffect, useContext } from "react";
-import AuthContext from "../context/AuthProvider";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { update } from "../redux/store/updateAuthSlice";
-import { redirect } from "react-router-dom";
+import { setToken } from "../redux/updateAuthSlice";
+import axios from "axios";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+
 const Login_URL = "http://localhost:3001/api/v1/user/login";
 
 function Login() {
-  const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
-
   const userRef = useRef();
-  const errRef = useRef();
-
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMesg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    setErrMsg("");
-  }, [user, pwd]);
-
-  const HandleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(Login_URL, JSON.stringify({ email: user, password: pwd }));
     try {
       const response = await axios.post(
         Login_URL,
         JSON.stringify({ email: user, password: pwd }),
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
-      console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.body?.token;
       localStorage.setItem("AccessToken", accessToken);
-
-      //vide les champs
       setUser("");
       setPwd("");
-      //change the state of the token which we will use in another page
-      dispatch(update(accessToken));
-      //Redirect to dashboard
+      dispatch(setToken(accessToken));
       window.location.replace("/user");
     } catch (err) {
       if (!err?.response) {
-        setErrMsg("No server Response");
+        setErrMsg("No server response");
+        console.log(errMesg);
       } else if (err.response?.status === 400) {
-        setErrMsg("Invalid Fields");
+        setErrMsg("Invalid fields");
+        console.log(errMesg);
       } else if (err.response?.status === 500) {
-        setErrMsg("internal server error");
+        setErrMsg("Internal server error");
+        console.log(errMesg);
       } else {
-        setErrMsg("Login Failed");
+        setErrMsg("Login failed");
+        console.log(errMesg);
       }
     }
   };
@@ -71,7 +56,7 @@ function Login() {
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          <form id="sign-in-box" onSubmit={HandleSubmit}>
+          <form id="sign-in-box" onSubmit={handleSubmit}>
             <div className="input-wrapper">
               <label>Username</label>
               <input

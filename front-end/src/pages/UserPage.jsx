@@ -6,14 +6,15 @@ import Account from "../components/account/Account";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Button from "../components/Button/Button";
-import { display, hide } from "../redux/editslice";
+import { hide } from "../redux/editslice";
+import { setUserName } from "../redux/updateAuthSlice";
 
-function UserPage() {
+const UserPage = () => {
   const dispatch = useDispatch();
   const visibility = useSelector((state) => state.edit.visibility);
-
   const token = localStorage.getItem("AccessToken");
 
+  const [headerName, setHeaderName] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -41,23 +42,32 @@ function UserPage() {
         const data = response?.data?.body;
         setFirstName(data.firstName);
         setLastName(data.lastName);
+
+        dispatch(setUserName(data.firstName));
+
+        setHeaderName(data.firstName);
       } catch (err) {
         handleErrorResponse(err);
       }
     };
 
     getNameInfos();
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, dispatch]);
 
   const handleErrorResponse = (err) => {
     if (!err?.response) {
       setErrMessage("No server response");
+      console.log(errMessage);
     } else if (err.response?.status === 400) {
       setErrMessage("Invalid fields");
+      console.log(errMessage);
     } else if (err.response?.status === 500) {
       setErrMessage("Internal server error");
+      console.log(errMessage);
     } else {
       setErrMessage("Login failed");
+      console.log(errMessage);
     }
   };
 
@@ -84,6 +94,7 @@ function UserPage() {
       );
       setFirstName(response.data.body.firstName);
       setLastName(response.data.body.lastName);
+      dispatch(setUserName(response.data.body.firstName));
     } catch (err) {
       handleErrorResponse(err);
     }
@@ -99,7 +110,7 @@ function UserPage() {
 
   return (
     <div className="page-container">
-      <Header signin="true" />
+      <Header signin="true" headerName={headerName} />
       <main className="main bg-dark">
         <div className="header">
           <div className={`welcome-back-message ${visibility ? "invisible" : "visible"}`}>
@@ -166,6 +177,6 @@ function UserPage() {
       <Footer />
     </div>
   );
-}
+};
 
 export default UserPage;
