@@ -1,0 +1,38 @@
+/* CollapseContent.css */
+
+/* Style for the custom select element container */
+.collapse-content-select-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Style for the custom select element */
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none; /* Remove the border */
+  padding: 6px 30px 6px 0px; /* Adjust the padding to make room for the arrow */
+
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Style for the custom select arrow */
+.custom-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 6px; /* Adjust the right value for arrow position */
+  transform: translateY(-50%);
+  width: 20px; /* Set the width of your arrow icon */
+  height: 20px; /* Set the height of your arrow icon */
+  background: url("../../assets/images/img/chevron-icon.png") no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+}
+
+/* Style for when the select element is focused */
+.custom-select:focus {
+  outline: none;
+  border-color: #007bff;
+}

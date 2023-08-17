@@ -1,6 +1,6 @@
 function HandleLogout() {
   localStorage.removeItem("AccessToken");
-  window.location.replace("/login");
+  window.location.replace("/");
 }
 
 export default HandleLogout;

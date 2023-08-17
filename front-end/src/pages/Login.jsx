@@ -8,12 +8,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { update } from "../redux/store/updateAuthSlice";
+import { redirect } from "react-router-dom";
 const Login_URL = "http://localhost:3001/api/v1/user/login";
 
 function Login() {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
-  const { setAuth } = useContext(AuthContext);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -43,12 +43,14 @@ function Login() {
       console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.body?.token;
       localStorage.setItem("AccessToken", accessToken);
-      //récupère le token dans le state
-      setAuth({ user, pwd, accessToken });
+
       //vide les champs
       setUser("");
       setPwd("");
+      //change the state of the token which we will use in another page
       dispatch(update(accessToken));
+      //Redirect to dashboard
+      window.location.replace("/user");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No server Response");

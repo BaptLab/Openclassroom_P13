@@ -1,82 +1,92 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import EditButton from "../components/Button/EditButton";
 import Account from "../components/account/Account";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Button from "../components/Button/Button";
 import { display, hide } from "../redux/editslice";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import axios from "axios";
 
 function UserPage() {
-  /*   const token = useSelector((state) => state.auth.token);
-   */
-  const [errMesg, setErrMsg] = useState("");
-
-  useEffect(() => {
-    getNameInfos();
-  }, []);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, []);
+  const dispatch = useDispatch();
+  const visibility = useSelector((state) => state.edit.visibility);
 
   const token = localStorage.getItem("AccessToken");
-  console.log("Token from localStorage:", token);
 
+  const [errMessage, setErrMessage] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [editedFirstName, setEditedFirstName] = useState(firstName);
+  const [editedLastName, setEditedLastName] = useState(lastName);
 
-  const getNameInfos = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/user/profile",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      console.log(response.data.body);
-      const data = response?.data?.body;
-      setFirstName(data.firstName); // Assuming your response contains a firstName field
-      setLastName(data.lastName); // Assuming your response contains a lastName field
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No server response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Invalid fields");
-      } else if (err.response?.status === 500) {
-        setErrMsg("Internal server error");
-      } else {
-        setErrMsg("Login failed");
+  useEffect(() => {
+    setErrMessage("");
+  }, []);
+
+  useEffect(() => {
+    const getNameInfos = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/api/v1/user/profile",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        const data = response?.data?.body;
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      } catch (err) {
+        handleErrorResponse(err);
       }
+    };
+
+    getNameInfos();
+  }, [token]);
+
+  const handleErrorResponse = (err) => {
+    if (!err?.response) {
+      setErrMessage("No server response");
+    } else if (err.response?.status === 400) {
+      setErrMessage("Invalid fields");
+    } else if (err.response?.status === 500) {
+      setErrMessage("Internal server error");
+    } else {
+      setErrMessage("Login failed");
     }
   };
 
-  const visibility = useSelector((state) => state.edit.visibility);
-  const dispatch = useDispatch();
-
-  /*   const [firstName, setFirstName] = useState("John");
-  const [lastName, setLastName] = useState("Smith");
- */ const [editedFirstName, setEditedFirstName] = useState(firstName);
-  const [editedLastName, setEditedLastName] = useState(lastName);
-
   const handleCancel = () => {
     dispatch(hide());
-    setEditedFirstName(firstName); // Reset edited first name
-    setEditedLastName(lastName); // Reset edited last name
+    setEditedFirstName(firstName);
+    setEditedLastName(lastName);
   };
 
-  const handleSubmit = () => {
+  const handleSubmitNames = async () => {
     dispatch(hide());
-    setFirstName(editedFirstName); // Update first name with edited value
-    setLastName(editedLastName); // Update last name with edited value
+    try {
+      const response = await axios.put(
+        "http://localhost:3001/api/v1/user/profile",
+        {
+          firstName: editedFirstName,
+          lastName: editedLastName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFirstName(response.data.body.firstName);
+      setLastName(response.data.body.lastName);
+    } catch (err) {
+      handleErrorResponse(err);
+    }
   };
 
   const handleFirstNameChange = (e) => {
@@ -86,7 +96,6 @@ function UserPage() {
   const handleLastNameChange = (e) => {
     setEditedLastName(e.target.value);
   };
-  getNameInfos();
 
   return (
     <div className="page-container">
@@ -113,8 +122,8 @@ function UserPage() {
                 onChange={handleFirstNameChange}
                 minLength={2}
                 maxLength={15}
-                placeholder="first name"
-                value={editedFirstName} // Display edited first name
+                placeholder="First name"
+                value={editedFirstName}
               />
               <input
                 type="text"
@@ -123,12 +132,12 @@ function UserPage() {
                 onChange={handleLastNameChange}
                 minLength={2}
                 maxLength={15}
-                placeholder="last name"
-                value={editedLastName} // Display edited last name
+                placeholder="Last name"
+                value={editedLastName}
               />
             </div>
             <div className="edit-name-button-section">
-              <button onClick={handleSubmit} className="edit-btn save-btn">
+              <button onClick={handleSubmitNames} className="edit-btn save-btn">
                 Save
               </button>
               <button onClick={handleCancel} className="edit-btn cancel-btn">
