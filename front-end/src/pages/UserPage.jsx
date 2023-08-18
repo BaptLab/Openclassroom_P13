@@ -39,6 +39,7 @@ const UserPage = () => {
             withCredentials: true,
           }
         );
+        console.log(response);
         const data = response?.data?.body;
         setFirstName(data.firstName);
         setLastName(data.lastName);
@@ -92,6 +93,7 @@ const UserPage = () => {
           },
         }
       );
+      console.log(response.data);
       setFirstName(response.data.body.firstName);
       setLastName(response.data.body.lastName);
       dispatch(setUserName(response.data.body.firstName));
