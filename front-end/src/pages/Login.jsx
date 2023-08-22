@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setToken } from "../redux/updateAuthSlice";
-import axios from "axios";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-
-const Login_URL = "http://localhost:3001/api/v1/user/login";
+import { getUserToken } from "../data/api";
+import { setUserToken } from "../redux/userSlice";
 
 function Login() {
   const dispatch = useDispatch();
@@ -21,18 +20,15 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        Login_URL,
-        JSON.stringify({ email: user, password: pwd }),
-        { headers: { "Content-Type": "application/json" }, withCredentials: true }
-      );
-      const accessToken = response?.data?.body?.token;
-      localStorage.setItem("AccessToken", accessToken);
-      setUser("");
-      setPwd("");
-      dispatch(setToken(accessToken));
+      const tokenReceived = await getUserToken(user, pwd);
+      console.log(tokenReceived);
+      localStorage.setItem("accessToken", tokenReceived);
       window.location.replace("/user");
-    } catch (err) {
+    } catch (error) {
+      // Handle error here
+    }
+
+    /* } catch (err) {
       if (!err?.response) {
         setErrMsg("No server response");
         console.log(errMesg);
@@ -46,7 +42,7 @@ function Login() {
         setErrMsg("Login failed");
         console.log(errMesg);
       }
-    }
+    } */
   };
 
   return (

@@ -5,7 +5,7 @@ import HandleLogout from "../events/HandleLogout";
 import { useSelector } from "react-redux";
 
 function Header(props) {
-  const firstName = useSelector((state) => state.auth.firstName);
+  const firstName = useSelector((state) => state.user.firstName);
 
   return (
     <nav className="main-nav">

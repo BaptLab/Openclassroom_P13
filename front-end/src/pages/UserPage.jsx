@@ -1,107 +1,72 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import EditButton from "../components/Button/EditButton";
 import Account from "../components/account/Account";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Button from "../components/Button/Button";
 import { hide } from "../redux/editslice";
-import { setUserName } from "../redux/updateAuthSlice";
+import { getUserInfos, updateUserInfos } from "../data/api";
+import { setUserNames } from "../redux/userSlice";
 
 const UserPage = () => {
   const dispatch = useDispatch();
-  const visibility = useSelector((state) => state.edit.visibility);
-  const token = localStorage.getItem("AccessToken");
 
-  const [headerName, setHeaderName] = useState("");
-  const [errMessage, setErrMessage] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  //First we get the User Token from the local storage
+  const token = localStorage.getItem("accessToken");
+
+  //We assure that we have values from the store
+  const visibility = useSelector((state) => state.edit.visibility);
+  const { firstName, lastName } = useSelector((state) => state.user);
+
+  //Temporary values when we edit the userNames
   const [editedFirstName, setEditedFirstName] = useState(firstName);
   const [editedLastName, setEditedLastName] = useState(lastName);
 
   useEffect(() => {
-    setErrMessage("");
-  }, []);
+    setEditedFirstName(firstName);
+    setEditedLastName(lastName);
+  }, [firstName, lastName]);
 
+  //whenever the token value change (or is loaded in this case), we fetch the userInfos (names) to display
   useEffect(() => {
-    const getNameInfos = async () => {
+    const getDataOnLoad = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3001/api/v1/user/profile",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(response);
-        const data = response?.data?.body;
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-
-        dispatch(setUserName(data.firstName));
-
-        setHeaderName(data.firstName);
-      } catch (err) {
-        handleErrorResponse(err);
+        const userInfosReceived = await getUserInfos(token);
+        //we set the values in the store to access it anywhere
+        dispatch(setUserNames(userInfosReceived));
+      } catch (error) {
+        throw error;
       }
     };
-
-    getNameInfos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getDataOnLoad();
   }, [token, dispatch]);
 
-  const handleErrorResponse = (err) => {
-    if (!err?.response) {
-      setErrMessage("No server response");
-      console.log(errMessage);
-    } else if (err.response?.status === 400) {
-      setErrMessage("Invalid fields");
-      console.log(errMessage);
-    } else if (err.response?.status === 500) {
-      setErrMessage("Internal server error");
-      console.log(errMessage);
-    } else {
-      setErrMessage("Login failed");
-      console.log(errMessage);
+  //When a firstName or lastName is submitted, we update the DB and the state according to the API response
+  const handleSubmitNames = async () => {
+    //we hide the edit input
+    dispatch(hide());
+    try {
+      const updatedUserInfos = await updateUserInfos(
+        token,
+        editedFirstName,
+        editedLastName
+      );
+      //We update the store with the new values
+      dispatch(setUserNames(updatedUserInfos));
+    } catch (error) {
+      throw error;
     }
   };
 
+  //if we click "cancel", the edit input are back to the value of the store (latest value)
   const handleCancel = () => {
     dispatch(hide());
     setEditedFirstName(firstName);
     setEditedLastName(lastName);
   };
 
-  const handleSubmitNames = async () => {
-    dispatch(hide());
-    try {
-      const response = await axios.put(
-        "http://localhost:3001/api/v1/user/profile",
-        {
-          firstName: editedFirstName,
-          lastName: editedLastName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
-      setFirstName(response.data.body.firstName);
-      setLastName(response.data.body.lastName);
-      dispatch(setUserName(response.data.body.firstName));
-    } catch (err) {
-      handleErrorResponse(err);
-    }
-  };
-
+  //we update the temporary state value when the input changes
   const handleFirstNameChange = (e) => {
     setEditedFirstName(e.target.value);
   };
@@ -112,7 +77,7 @@ const UserPage = () => {
 
   return (
     <div className="page-container">
-      <Header signin="true" headerName={headerName} />
+      <Header signin="true" />
       <main className="main bg-dark">
         <div className="header">
           <div className={`welcome-back-message ${visibility ? "invisible" : "visible"}`}>
