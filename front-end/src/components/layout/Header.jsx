@@ -3,8 +3,29 @@ import logo from "../../assets/images/img/argentBankLogo.png";
 import logout from "../../assets/images/img/icon-logout.png";
 import HandleLogout from "../events/HandleLogout";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getUserInfos } from "../../data/api";
+import { setUserNames } from "../../redux/userSlice";
 
 function Header(props) {
+  const token = localStorage.getItem("accessToken");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getDataOnLoad = async () => {
+      try {
+        const userInfosReceived = await getUserInfos(token);
+        //we set the values in the store to access it anywhere
+        dispatch(setUserNames(userInfosReceived));
+      } catch (error) {
+        throw error;
+      }
+    };
+    getDataOnLoad();
+  }, [token, dispatch]);
+
   const firstName = useSelector((state) => state.user.firstName);
 
   return (
