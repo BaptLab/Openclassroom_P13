@@ -1,11 +1,14 @@
 import React from "react";
+
 import Header from "../components/layout/Header.jsx";
 import Tagline from "../components/tagline/Tagline.jsx";
 import Footer from "../components/layout/Footer.jsx";
-import "../css/main.css";
+
 import chatIcon from "../assets/images/img/icon-chat.png";
 import moneyIcon from "../assets/images/img/icon-money.png";
 import securityIcon from "../assets/images/img/icon-security.png";
+
+import "../css/main.css";
 
 function Homepage() {
   return (

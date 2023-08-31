@@ -1,4 +1,3 @@
-import "./transactioncollapse.css";
 import React from "react";
 
 function TransactionHeader(props) {

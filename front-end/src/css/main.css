@@ -64,6 +64,7 @@ body {
 .main-nav-logo {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .main-nav-logo-image {
@@ -140,6 +141,123 @@ body {
 }
 
 /* CollapseContent.css */
+
+/* Style for the custom select element container */
+.collapse-content-select-container {
+  display: inline-block;
+  position: relative;
+}
+
+.collapse-header {
+  display: flex;
+  position: relative;
+}
+
+.account-balance {
+  font-size: 1.6em;
+}
+
+.balance-section {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px lightgray;
+}
+
+.header-infos {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em 3em;
+  width: 100%;
+}
+
+.chevron {
+  height: 1em;
+  width: auto;
+  position: absolute;
+  margin-left: 15px;
+  top: 35%;
+  color: #4c5c6b;
+}
+
+.chevron-up {
+  transform: rotate(270deg);
+  transition-duration: 0.3s;
+}
+
+.option {
+  padding-left: 5.2em;
+}
+
+.open {
+}
+
+.chevron-down {
+  transform: rotate(90deg);
+  transition-duration: 0.3s;
+}
+
+.collapse-text {
+  display: flex;
+  align-items: center;
+}
+
+.select-dropdown .option {
+  cursor: pointer;
+}
+
+.collapse-content-container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0.5em 3em;
+}
+
+.collapse-content-text-group {
+  padding-bottom: 1em;
+}
+.collapse-content-text-group .arrow-icon {
+  margin-left: 2em;
+}
+
+.collapse-open {
+  display: block;
+}
+
+.collapse-close {
+  display: none;
+}
+
+/* Style for the custom select element */
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none; /* Remove the border */
+  padding: 6px 30px 6px 0px; /* Adjust the padding to make room for the arrow */
+
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Style for the custom select arrow */
+.custom-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 6px; /* Adjust the right value for arrow position */
+  transform: translateY(-50%);
+  width: 20px; /* Set the width of your arrow icon */
+  height: 20px; /* Set the height of your arrow icon */
+  background: url("../assets/images/img/chevron-icon.png") no-repeat center;
+  background-size: contain;
+  cursor: pointer;
+}
+
+/* Style for when the select element is focused */
+.custom-select:focus {
+  outline: none;
+  border-color: #007bff;
+}
 
 /* Style for the custom select element */
 .custom-select {

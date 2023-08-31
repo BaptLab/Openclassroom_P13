@@ -1,9 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function RedirectButton(props) {
+  const navigate = useNavigate();
   const handleRedirect = (e) => {
     e.preventDefault();
-    window.location.href = props.url;
+    navigate(props.url);
   };
 
   return (

@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import EditButton from "../components/Button/EditButton";
 import Account from "../components/account/Account";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import Button from "../components/Button/Button";
+
 import { hide } from "../redux/editslice";
-import { getUserInfos, updateUserInfos } from "../data/api";
 import { setUserNames } from "../redux/userSlice";
+
+import { getUserInfos, updateUserInfos } from "../data/api";
 
 const UserPage = () => {
   const dispatch = useDispatch();
 
-  //First we get the User Token from the local storage
-  const token = localStorage.getItem("accessToken");
-
+  const stateToken = useSelector((state) => state.user.token);
+  console.log(stateToken);
   //We assure that we have values from the store
   const visibility = useSelector((state) => state.edit.visibility);
   const { firstName, lastName } = useSelector((state) => state.user);
@@ -32,7 +34,7 @@ const UserPage = () => {
   useEffect(() => {
     const getDataOnLoad = async () => {
       try {
-        const userInfosReceived = await getUserInfos(token);
+        const userInfosReceived = await getUserInfos(stateToken);
         //we set the values in the store to access it anywhere
         dispatch(setUserNames(userInfosReceived));
       } catch (error) {
@@ -40,7 +42,7 @@ const UserPage = () => {
       }
     };
     getDataOnLoad();
-  }, [token, dispatch]);
+  }, [stateToken, dispatch]);
 
   //When a firstName or lastName is submitted, we update the DB and the state according to the API response
   const handleSubmitNames = async () => {
@@ -48,7 +50,7 @@ const UserPage = () => {
     dispatch(hide());
     try {
       const updatedUserInfos = await updateUserInfos(
-        token,
+        stateToken,
         editedFirstName,
         editedLastName
       );

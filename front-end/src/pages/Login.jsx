@@ -1,49 +1,43 @@
 import React, { useRef, useState, useEffect } from "react";
+
 import { useDispatch } from "react-redux";
-import { setToken } from "../redux/updateAuthSlice";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { getUserToken } from "../data/api";
 import { setUserToken } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
+
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userRef = useRef();
+
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
-  const [errMesg, setErrMsg] = useState("");
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  const setUserNameInput = (e) => {
+    setUser(e.target.value);
+  };
+
+  const setUserPwdInput = (e) => {
+    setPwd(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const tokenReceived = await getUserToken(user, pwd);
-      console.log(tokenReceived);
-      localStorage.setItem("accessToken", tokenReceived);
-      window.location.replace("/user");
+      dispatch(setUserToken(tokenReceived));
+      navigate("/user");
     } catch (error) {
-      // Handle error here
+      console.log(error);
     }
-
-    /* } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No server response");
-        console.log(errMesg);
-      } else if (err.response?.status === 400) {
-        setErrMsg("Invalid fields");
-        console.log(errMesg);
-      } else if (err.response?.status === 500) {
-        setErrMsg("Internal server error");
-        console.log(errMesg);
-      } else {
-        setErrMsg("Login failed");
-        console.log(errMesg);
-      }
-    } */
   };
+
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
 
   return (
     <div className="page-container">
@@ -60,9 +54,7 @@ function Login() {
                 id="username"
                 autoComplete="off"
                 ref={userRef}
-                onChange={(e) => {
-                  setUser(e.target.value);
-                }}
+                onChange={setUserNameInput}
                 value={user}
                 required
               />
@@ -72,7 +64,7 @@ function Login() {
               <input
                 type="password"
                 id="password"
-                onChange={(e) => setPwd(e.target.value)}
+                onChange={setUserPwdInput}
                 value={pwd}
                 required
               />
@@ -82,10 +74,6 @@ function Login() {
               <label>Remember me</label>
             </div>
             <button className="transaction-button">Sign in</button>
-            {/* <Button>
-              Sign in
-              <RedirectButton action="Sign in" url="/user" />
-            </Button> */}
           </form>
         </section>
       </main>

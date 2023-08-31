@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import chevron from "../../assets/images/img/chevron-icon.png";
+
 import CollapseContent from "./CollapseContent";
 import TransactionHeader from "./TransactionHeader";
 

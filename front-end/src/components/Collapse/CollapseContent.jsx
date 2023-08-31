@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./CollapseContent.css"; // Make sure to import your CSS file
+
 import pencilPng from "../../assets/images/img/pencil.png";
 
 function CollapseContent(props) {
