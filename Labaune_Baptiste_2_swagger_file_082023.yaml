@@ -58,7 +58,7 @@ paths:
         "500":
           description: Internal Server Error
   /user/profile:
-    get:
+    post:
       security:
         - Bearer: []
       tags:
@@ -112,14 +112,14 @@ paths:
           description: Invalid Fields
         "500":
           description: Internal Server Error
-  /user/profile/transactions:
-    get:
+  /user/profile/accounts:
+    post:
       security:
         - Bearer: []
       tags:
         - User Module
       summary: User Accounts API
-      description: API for fetching the user transactions
+      description: API for fetching user account data
       parameters:
         - in: header
           type: string
@@ -134,38 +134,34 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/UserTransactions"
+              $ref: "#/definitions/UserAccounts"
         "400":
           description: Invalid Fields
         "500":
           description: Internal Server Error
-  /user/profile/transactions/{transactionId}:
+  /user/profile/account/details:
     post:
       security:
         - Bearer: []
       tags:
         - User Module
       summary: User Account Details API
-      description: API for fetching a chosen user transaction details
+      description: API for fetching user account details data
       parameters:
         - in: header
           type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
-        - in: body
-          name: body
-          description: Update user account transactions attributes
-          required: true
-          schema:
-            $ref: "#/definitions/UserTransactionId"
       produces:
         - application/json
       responses:
         "200":
           description: User account details data retrieved successfully
           schema:
-            $ref: "#/definitions/UserTransactionDetail"
+            type: array
+            items:
+              $ref: "#/definitions/UserAccountTransactions"
         "400":
           description: Invalid Fields
         "500":
@@ -176,7 +172,7 @@ paths:
       tags:
         - User Module
       summary: User Account Details API
-      description: API for updating a choser user transaction note and/or category
+      description: API for updating a user account details
       parameters:
         - in: header
           type: string
@@ -195,7 +191,9 @@ paths:
         "200":
           description: User profile retrieved successully
           schema:
-            $ref: "#/definitions/UserTransactionDetail"
+            type: array
+            items:
+              $ref: "#/definitions/UserAccountTransactions"
         "400":
           description: Invalid Fields
         "500":
@@ -223,11 +221,6 @@ definitions:
       password:
         type: string
         description: user password
-  UserTransactionId:
-    properties:
-      transactionId:
-        type: string
-        description: user transaction Id
   ApiResponse:
     type: object
     properties:
@@ -276,7 +269,7 @@ definitions:
             type: string
           id:
             type: string
-  UserTransactions:
+  UserAccounts:
     type: object
     properties:
       status:
@@ -290,7 +283,7 @@ definitions:
             type: string
           accountBalance:
             type: string
-  UserTransactionDetail:
+  UserAccountTransactions:
     type: object
     properties:
       status:
@@ -298,6 +291,7 @@ definitions:
       message:
         type: string
       body:
+        type: object
         properties:
           transactionID:
             type: string

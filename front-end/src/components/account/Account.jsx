@@ -10,7 +10,11 @@ function Account(props) {
         <p className="account-amount-description">Available Balance</p>
       </div>
       <Button>
-        <RedirectButton action="View Transaction" url="/user/transactions" />
+        <RedirectButton
+          id="account-btn"
+          action="View Transaction"
+          url="/user/transactions"
+        />
       </Button>
     </section>
   );

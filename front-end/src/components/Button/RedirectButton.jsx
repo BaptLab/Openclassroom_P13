@@ -9,7 +9,7 @@ function RedirectButton(props) {
   };
 
   return (
-    <button className="transaction-button" onClick={handleRedirect}>
+    <button id={props.id} className="transaction-button" onClick={handleRedirect}>
       {props.action}
     </button>
   );

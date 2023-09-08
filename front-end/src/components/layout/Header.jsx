@@ -21,13 +21,13 @@ function Header(props) {
       {firstName ? (
         <div className="header-right">
           <div className="user-icon">
-            <span className="header-user-name">{firstName}</span>
             <i className="fa fa-user-circle fa-lg"></i>
+            <span className="header-user-name">{firstName}</span>
           </div>
           {/* eslint-disable jsx-a11y/anchor-is-valid */}
           <a href="#" onClick={HandleLogout} className="logout">
             <img src={logout} className="logout-btn" alt="Logout Button" />
-            <span className="logout-text">Log out</span>
+            <span className="logout-text">Sign out</span>
           </a>
         </div>
       ) : (
