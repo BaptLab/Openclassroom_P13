@@ -361,6 +361,22 @@ body {
   padding: 2rem;
 }
 
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.err-msg-container {
+  margin-top: 5px;
+  font-size: 0.8em;
+  display: flex;
+  text-align: left;
+  color: rgb(243, 141, 46);
+}
+
 #account-btn {
   text-decoration: inherit;
 }

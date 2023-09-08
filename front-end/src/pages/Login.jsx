@@ -15,6 +15,7 @@ function Login() {
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
+  const [ErrMsg, setErrMsg] = useState(false);
 
   const setUserNameInput = (e) => {
     setUser(e.target.value);
@@ -29,8 +30,10 @@ function Login() {
     try {
       const tokenReceived = await getUserToken(user, pwd);
       dispatch(setUserToken(tokenReceived));
+      setErrMsg(false);
       navigate("/user");
     } catch (error) {
+      setErrMsg(true);
       console.log(error);
     }
   };
@@ -72,6 +75,11 @@ function Login() {
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />
               <label>Remember me</label>
+            </div>
+            <div className="err-msg-container">
+              <span className={`err-msg ${ErrMsg ? "show" : "hide"}`}>
+                The username and/or password is incorrect !
+              </span>
             </div>
             <button className="transaction-button">Sign in</button>
           </form>
